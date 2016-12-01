@@ -10,6 +10,4 @@ function speakerNames() {
 
 const getSpeakerNames = ClientFunction(speakerNames);
 
-test('Selenium Conf speaker names', async t =>
-	console.log(await getSpeakerNames())
-);
+test('Selenium Conf speaker names', async t => console.log(await getSpeakerNames()));

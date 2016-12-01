@@ -1,7 +1,6 @@
-var assert = require('assert');
+const assert = require('assert');
 
-var browser = require('testium-mocha').browser;
-
+const browser = require('testium-mocha').browser;
 
 describe('Testium Example', function() {
   before(browser.beforeHook());
