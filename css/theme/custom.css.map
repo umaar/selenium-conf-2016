@@ -1,0 +1,12 @@
+{
+	"version": 3,
+	"file": "custom.css",
+	"sources": [
+		"source/custom.scss"
+	],
+	"sourcesContent": [
+		"\n.reveal section img {\n\tborder: none;\n\tbackground: none;\n}\n\n.slide-shazam {\n\timg{\n\t\tmax-width: 100px;\n\t}\n}\n\n.slide-long-list {\n\tcolumn-count: 2;\n\tcolumn-gap: 6vw;\n}\n\n.reveal pre {\n\twidth: 95%;\n}\n\n.reveal pre code {\n\tfont-size: 42px;\n\tline-height: 1.3;\n\tmax-height: 760px;\n\tpadding: 20px;\n}\n\n.reveal section {\n\th1, h2, h3, h4 {\n\t\t$heading-colour: #eee;\n\t\tcolor: $heading-colour;\n\t}\n}\n\n"
+	],
+	"mappings": "AACA,AAAgB,OAAT,CAAC,OAAO,CAAC,GAAG,CAAC;EACnB,MAAM,EAAE,IAAK;EACb,UAAU,EAAE,IAAK;CACjB;;AAED,AACC,aADY,CACZ,GAAG,CAAA;EACF,SAAS,EAAE,KAAM;CACjB;;AAGF,AAAA,gBAAgB,CAAC;EAChB,YAAY,EAAE,CAAE;EAChB,UAAU,EAAE,GAAI;CAChB;;AAED,AAAQ,OAAD,CAAC,GAAG,CAAC;EACX,KAAK,EAAE,GAAI;CACX;;AAED,AAAY,OAAL,CAAC,GAAG,CAAC,IAAI,CAAC;EAChB,SAAS,EAAE,IAAK;EAChB,WAAW,EAAE,GAAI;EACjB,UAAU,EAAE,KAAM;EAClB,OAAO,EAAE,IAAK;CACd;;AAED,AACC,OADM,CAAC,OAAO,CACd,EAAE,EADH,AACK,OADE,CAAC,OAAO,CACV,EAAE,EADP,AACS,OADF,CAAC,OAAO,CACN,EAAE,EADX,AACa,OADN,CAAC,OAAO,CACF,EAAE,CAAC;EAEd,KAAK,EADY,IAAI;CAErB",
+	"names": []
+}

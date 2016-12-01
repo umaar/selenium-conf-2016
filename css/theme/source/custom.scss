@@ -1,0 +1,35 @@
+
+.reveal section img {
+	border: none;
+	background: none;
+}
+
+.slide-shazam {
+	img{
+		max-width: 100px;
+	}
+}
+
+.slide-long-list {
+	column-count: 2;
+	column-gap: 6vw;
+}
+
+.reveal pre {
+	width: 95%;
+}
+
+.reveal pre code {
+	font-size: 42px;
+	line-height: 1.3;
+	max-height: 760px;
+	padding: 20px;
+}
+
+.reveal section {
+	h1, h2, h3, h4 {
+		$heading-colour: #eee;
+		color: $heading-colour;
+	}
+}
+

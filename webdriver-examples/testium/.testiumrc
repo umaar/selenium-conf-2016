@@ -1,0 +1,4 @@
+browser: 'chrome'
+selenium:
+  chromedriver: '/usr/local/bin/chromedriver'
+  debug: true

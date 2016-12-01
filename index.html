@@ -1,0 +1,671 @@
+<!doctype html>
+<html>
+    <head>
+        <meta charset="utf-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+
+        <title>selenium conf 2016</title>
+
+        <link rel="stylesheet" href="css/reveal.css">
+        <link rel="stylesheet" href="css/theme/blood.css">
+        <link rel="stylesheet" href="lib/css/zenburn.css">
+        <link rel="stylesheet" href="css/theme/custom.css">
+    </head>
+    <body>
+        <div class="reveal">
+            <div class="slides">
+
+<section>
+    <h2>JavaScript and Browser Automation</h2>
+    <h3>Selenium Conf 2016</h3>
+    <small>Umar Hansa / <a target="_blank" href="https://twitter.com/umaar">@umaar</a></small>
+    <p><a target="_blank" href="https://www.youtube.com/watch?v=EufdahOSJIc">See this talk online</a></p>
+</section>
+
+
+<section>
+    <h1>DevTools Tips</h1>
+</section>
+
+<section>
+    <blockquote>
+        A developer tip, in the form of a gif, in your inbox each week.
+    </blockquote>
+<p>Subscribe: <a target="_blank" href="https://umaar.com/dev-tips/">
+    <strong>umaar.com/dev-tips</strong>
+</a></p>
+
+
+<p>Or search: 'chrome dev tips'</p>
+
+    <p><strong>>120</strong> tips posted so far! 🎊</p>
+</section>
+
+<section>
+    <h2>The goal of this talk</h2>
+    <ul>
+        <li>Understanding how to automate browsers in JS</li>
+        <li>Evaluate some browser automation tooling</li>
+        <li>Learn some debugging tricks</li>
+    </ul>
+</section>
+
+
+<section>
+    <h2>Why JavaScript?</h2>
+</section>
+
+<section>
+    <h2>The NPM ecosystem</h2>
+    <img src="img/npm-rolling-downloads.png" alt="">
+    <p>Over 1 billion downloads per week</p>
+</section>
+
+<section>
+    <p>
+        Projects <a target="_blank" href="https://github.com/search?q=stars:%3E1&s=stars&type=Repositories">most ⭐starred⭐ on github</a> are mainly JS
+    </p>
+    <img src="img/octocat.png" alt="octocat">
+</section>
+
+<section>
+    <p>JavaScript has elegant sytax</p>
+</section>
+
+<section>
+    <h3>Fat arrow</h3>
+    <pre><code class="js" class="js">
+const odds = evens.map(v => v + 1)
+
+</code></pre>
+</section>
+
+<section>
+    <h3>Destructuring</h3>
+    <pre><code class="js">
+[a, , b] = [1,2,3];
+// a = 1
+// b = 3
+
+</code></pre>
+</section>
+
+<section>
+    <h3>async/await</h3>
+</section>
+
+<section>
+    <h3>Before async/await (callback version)</h3>
+
+<pre><code class="js">
+browser.getTitle(function(title) {
+    console.log(title)
+})
+
+</code></pre>
+</section>
+
+<section>
+    <h3>Before async/await (promise version)</h3>
+
+<pre><code class="js">
+browser.getTitle().then(function(title) {
+    console.log(title)
+})
+
+</code></pre>
+</section>
+
+<section>
+    <h3>With async/await</h3>
+
+<pre><code class="js">
+title = await browser.getTitle()
+
+</code></pre>
+</section>
+
+
+<section>
+    <h3>Template strings</h3>
+   <pre><code class="js">
+const selector = `.header`
+findElement(`body ${selector}`)
+
+</code></pre>
+</section>
+
+<section>
+    <h1>Recipes</h1>
+</section>
+
+<section>
+    <h2>Counting Wiki links</h2>
+</section>
+
+<section>
+    <pre><code class="bash" class="hljs" >
+# In your terminal
+npm i selenium-webdriver
+    </code></pre>
+</section>
+
+<section>
+    <pre><code class="js" class="hljs" >
+const webdriver = require('selenium-webdriver');
+    </code></pre>
+</section>
+
+<section>
+    <pre><code class="js" class="hljs" >
+// no need to memorise this 😧
+
+const browser = new webdriver
+    .Builder()
+    .usingServer()
+    .withCapabilities({'browserName': 'chrome' })
+    .build();
+    </code></pre>
+</section>
+
+<section>
+    <pre><code class="js" class="hljs" >
+browser.get('http://en.wikipedia.org/wiki/Wiki');
+    </code></pre>
+</section>
+
+<section>
+    <pre><code class="js" class="hljs" >
+const links = await browser.findElements(
+    webdriver.By.css('[href^="/wiki/"]')
+)
+
+concole.log(links.length)
+    </code></pre>
+</section>
+
+<section>
+    <pre><code class="bash" class="hljs" >
+node Wiki.js
+
+# > 396
+    </code></pre>
+</section>
+
+<section>
+    <h3>Getting to Philosophy on Wikipedia</h3>
+</section>
+
+<section>
+<p>Getting to Philosophy on Wikipedia</p>
+        <blockquote>Clicking on the first lowercase link in the main text of a Wikipedia article, and then repeating the process for subsequent articles, usually eventually gets one to the Philosophy article.</blockquote>
+</section>
+
+<section>
+    <pre><code class="js" class="hljs" >
+const url = 'wikipedia.org/wiki/Special:Random';
+browser.get(url).then(clickFirstLink)
+    </code></pre>
+</section>
+
+
+<section>
+    <pre><code class="js" class="hljs" >
+function clickFirstLink() {
+    const link = '#mw-content-text > p a[title]';
+    browser.click(link);
+}
+    </code></pre>
+</section>
+
+<section>
+    <pre><code class="js" class="hljs" >
+if (linkText === 'Philosophy') {
+    // We made it!
+} else {
+    link.click().then(clickFirstLink);
+}
+    </code></pre>
+</section>
+
+
+
+
+<section data-background-video="vid/wiki-philosophy.mp4"></section>
+
+<section>
+    <h2>A Google Search</h2>
+    <p>The 'hello world' of browser automation</p>
+</section>
+
+<section data-background-video="vid/google-search.mov"></section>
+
+<section>
+    <h2>Selenium WebDriver</h2>
+    <p>Official JS bindings</p>
+</section>
+
+<section>
+    <pre><code class="js" class="hljs" >
+browser.get('https://www.google.com');
+    </code></pre>
+</section>
+
+
+<section>
+    <pre><code class="js" class="hljs" >
+browser
+    .findElement(webdriver.By.name('q'))
+    .sendKeys('selenium conf 2016');
+    </code></pre>
+</section>
+
+
+<section>
+    <pre><code class="js" class="hljs" >
+browser
+    .findElement(webdriver.By.name('btnG'))
+    .click();
+    </code></pre>
+</section>
+
+
+<section>
+    <pre><code class="js" class="hljs" >
+const selector = webdriver.By.css(
+    '[href="http://seleniumconf.co.uk/"]'
+);
+
+const link = webdriver
+    .until
+    .elementLocated(selector);
+    </code></pre>
+</section>
+
+
+<section>
+    <pre><code class="js" class="hljs" >
+browser.wait(link, 2000).click();
+    </code></pre>
+</section>
+
+
+<section>
+    <pre><code class="js" class="hljs" >
+console.log('Title: ', await browser.getTitle());
+
+//Instead of:
+
+browser.getTitle()
+    .then(title => console.log(title));
+
+    </code></pre>
+</section>
+
+
+<section>
+    <pre><code class="sh" class="hljs" >
+$ node --harmony-async-await search.js
+
+# Title:  SeleniumConf UK 2016 - Home page
+    </code></pre>
+</section>
+
+<section>
+    <h2>Error examples</h2>
+</section>
+
+<section>
+    <h3>Missing URL to <code class="js">browser.get()</code></h3>
+</section>
+
+<section data-background="img/selenium-webdriver-error-example-1.png"></section>
+<section data-background="img/selenium-webdriver-error-example-2.png"></section>
+<section data-background="img/selenium-webdriver-custom-error-example.png"></section>
+
+<section>
+    <ul class="slide-long-list">
+        <li>✅ The official JavaScript bindings</li>
+        <li>✅ Solid documentation</li>
+        <li>✅ Lots of <a target="_blank" href="https://github.com/SeleniumHQ/selenium/wiki">reading material</a> (Wiki) e.g. Design Patterns</li>
+        <li>✅ Low level - power to do anything</li>
+        <li>❗Promise Manager (ControlFlow) - however it can be <a target="_blank"  href="http://seleniumhq.github.io/selenium/docs/api/javascript/module/selenium-webdriver/lib/promise.html">turned off</a></li>
+        <li>❗Awkward terminal output</li>
+    </ul>
+</section>
+
+<section>
+    <h2>DalekJS</h2>
+</section>
+
+<section data-background="img/dalek-homepage.png"></section>
+<section data-background="img/dalek-code-example.png"></section>
+<section data-background="img/dalek-output-example.png"></section>
+<section data-background="img/dalek-fail.png"></section>
+
+<section>
+    <h2>WebDriver.io</h2>
+</section>
+
+
+<section data-background="img/webdriver-io-site.png"></section>
+<section data-background="img/webdriver-io-docs-example.png"></section>
+<section data-background="img/webdriver-io-github.png"></section>
+
+<section>
+    <h4>The Google search demo...</h4>
+</section>
+
+<section>
+    <pre><code class="js" class="hljs" >
+var client = webdriverio.remote(options);
+client
+    .init()
+    .url('https://google.com')
+    .setValue('*[name="q"]','selenium conf 2016')
+    .click('*[name="btnG"]')
+    .click('[href="http://seleniumconf.co.uk/"]')
+    .getTitle().then(console.log)
+    .end()
+    </code></pre>
+</section>
+
+<section data-background="img/webdriver-io-silent-error.png"></section>
+
+<section>
+    <ul class="slide-long-list">
+        <li>❗Swallowing JavaScript Errors</li>
+        <li>❗Having to call <code>end()</code></li>
+        <li>❗Docs showing older JS syntax</code></li>
+        <li>✅ Easy to understand</li>
+        <li>✅ Quick to get started with</li>
+        <li>✅ 2.4k commits</li>
+    </ul>
+</section>
+
+
+<section>
+    <img src="img/wd-io.png" alt="">
+</section>
+<section data-background="img/wd-io-github.png"></section>
+<section data-background="img/wd-io-yield-example.png"></section>
+<section data-background="img/wd-io-api-docs.png"></section>
+
+<section>
+    <h2>Testium</h2>
+</section>
+
+<section data-background="img/testium-setup.png"></section>
+<section data-background="img/testium-docs.png"></section>
+<section data-background="img/testium-blog.png"></section>
+<section data-background="img/testium-github.png"></section>
+
+<section>
+    <pre><code class="js" class="hljs" >
+it('performs a google search', function() {
+    const linkSelector = '[href="http://seleniumconf.co.uk/"]';
+    browser.navigateTo('https://google.com');
+    browser.type('[name="q"]', 'selenium conf 2016')
+    browser.waitForElementExist(linkSelector);
+    browser.click(linkSelector);
+    console.log('Title is: ', browser.getPageTitle());
+});
+    </code></pre>
+</section>
+
+<section data-background="img/testium-search-example.png"></section>
+<section data-background="img/testium-element-error.png"></section>
+<section data-background="img/testium-custom-error.png"></section>
+
+<section>
+    <ul class="slide-long-list">
+        <li>❗Last release a year ago, Nov 2015</li>
+        <li>❗Lots of code examples in coffeescript (api docs in JS)</li>
+        <li>✅ Decent Terminal Output</li>
+        <li>✅ Simple API</li>
+        <li>✅ Automatic screenshot tracking</li>
+    </ul>
+</section>
+
+
+<section>
+    <h2>Nightwatch</h2>
+</section>
+
+<section data-background="img/nightwatch-homepage.png"></section>
+<section data-background="img/nightwatch-github.png"></section>
+<section data-background="img/nightwatch-doc-code-example.png"></section>
+
+
+
+
+<section>
+    <h2>Testcafe</h2>
+</section>
+
+<section data-background="img/testcafe-github.png"></section>
+<section data-background="img/testcafe-doc-example.png"></section>
+<section data-background="img/testcafe-blog.png"></section>
+
+<section>
+    <img src="img/testcafe.gif" alt="">
+</section>
+
+
+
+<section>
+    <pre><code class="js" class="hljs" >
+import { ClientFunction } from 'testcafe';
+    </code></pre>
+</section>
+
+<section>
+    <pre><code class="js" class="hljs" >
+const getTitle = ClientFunction(() => document.title);
+    </code></pre>
+</section>
+
+<section>
+    <pre><code class="js" class="hljs" >
+fixture `Google Search for Selenium Conf 2016`
+    .page `https://www.google.com`;
+    </code></pre>
+</section>
+
+<section>
+    <pre><code class="js" class="hljs" >
+const text = 'selenium conf 2016';
+const link = '[href="http://seleniumconf.co.uk/"]';
+
+await t.typeText('[name="q"]', 'selenium conf 2016')
+await t.click('[name="btnK"]');
+await t.click('[href="http://seleniumconf.co.uk/"]');
+console.log('Title: ', await getTitle());
+    </code></pre>
+</section>
+
+
+
+
+<section data-background="img/testcafe-google-search.png"></section>
+<section data-background="img/testcafe-example-results.png"></section>
+
+<section>
+    <h2>Custom Error</h2>
+</section>
+
+<section data-background="img/testcafe-example-search-custom-error.png"></section>
+<section data-background="img/testcafe-example-search-dns-error.png"></section>
+<section data-background="img/testcafe-example-search-element-error.png"></section>
+
+<section>
+    <ul class="slide-long-list">
+        <li>✅ Nice terminal output</li>
+        <li>✅ Elegant API, official JS syntax</li>
+        <li>✅ Solid documentation, all in ES6/ES7</li>
+        <li>✅ Automatic wait for element visibility</li>
+        <li>❓ No built in <code class="js">getTitle</code></li>
+        <li>❓ Still a bit new</li>
+    </ul>
+</section>
+
+<section>
+    <h4>Scraping speaker names from the conference website</h4>
+</section>
+
+<section data-background="img/testcafe-scrape-names-prep.png"></section>
+<section data-background="img/testcafe-scrape-names.png"></section>
+<section data-background-video="vid/scrape-names.mp4"></section>
+
+<section>
+    <h2>Tips and tricks</h2>
+</section>
+
+<section>
+    <h2>Selenium - webdriver.js</h2>
+    <p>Source code as documentation</p>
+</section>
+
+<section>
+    <p>
+        <a target="_blank"  href="https://github.com/SeleniumHQ/selenium/blob/master/javascript/node/selenium-webdriver/lib/webdriver.js">
+            github.com/SeleniumHQ/selenium/blob/master/javascript/node/selenium-webdriver/lib/webdriver.js
+        </a>
+    </p>
+</section>
+
+<section data-background="img/selenium-webdriver-js-docs-get-text.png"></section>
+<section data-background="img/selenium-webdriver-js-docs-maximise.png"></section>
+<section data-background="img/selenium-webdriver-js-docs-get-url.png"></section>
+
+<section data-background="img/never-sleep.gif">
+    <h1>Never Sleep</h1>
+    <h2>🙅 <code class="js">.sleep() / .pause()</code>🙅</h2>
+</section>
+
+<section>
+    <h4>Replace existing <code class="js">sleeps</code> with <code class="js">waitFor</code></h4>
+</section>
+
+
+
+<section>
+    <h3>Introduce errors for learning</h3>
+    <ul>
+        <li>Throw JS errors</li>
+        <li>Go to invalid pages</li>
+        <li>Manipulate hidden parts of the DOM</li>
+    </ul>
+</section>
+
+<section>
+    <h4>Use a MITM proxy to mock network requests</h4>
+</section>
+
+<section data-background="img/github-mitm-proxy.png"></section>
+
+<section data-background-video="vid/proxy-example.mp4"></section>
+
+<section>
+    <h2>Proxy Use cases</h2>
+    <ul>
+        <li>Scraping: block JS + CSS from loading</li>
+        <li>Testing: serve static data for expensive server calls</li>
+        <li>Learning: manipulate the response, learn more HTTP</li>
+    </ul>
+</section>
+
+<section>
+    <h3>Code review <strong>everything</strong></h3>
+    <p>Encourage best practices</p>
+</section>
+
+
+<section>
+    <h2>Your tests are still code</h2>
+</section>
+
+<section>
+    <ul>
+        <li>Lint</li>
+        <li>Code Review</li>
+        <li>Pair</li>
+        <li>Documentation</li>
+    </ul>
+</section>
+
+<section>
+    <h4>Extra considerations</h4>
+    <ul>
+        <li>Caching</li>
+        <li>User agents</li>
+        <li>Screen dimensions</li>
+        <li>Restarting the browser with a fresh profile</li>
+    </ul>
+</section>
+
+<section>
+    <h4>Speed</h4>
+    <p>Split your tests up based on priority</p>
+    <p>Run <code class="js">p1</code> tests before a deploy</p>
+    <p>Run <code class="js">p3</code> tests overnight</p>
+</section>
+
+<section>
+    <h5>Async</h5>
+    <p>Take time to learn async with callbacks, promises and await</p>
+    <p><code class="js">async/await</code> is still async code</p>
+</section>
+
+<section>
+    <h2>Further Reading</h2>
+</section>
+
+<section>
+    <h4>Browser Automation Libraries</h4>
+    <p><a target="_blank" href="https://watirmelon.blog/2015/12/08/comparison-of-javascript-browser-automation-and-test-specification-libraries/">https://watirmelon.blog/2015/12/08/comparison-of-javascript-browser-automation-and-test-specification-libraries/</a></p>
+</section>
+
+<section>
+    <h2>Live edit WebDriverJS code</h2>
+    <p><code>node --inspect google-search-example.js</code></p>
+    <p><a target="_blank" href="https://umaar.com/dev-tips/119-node-js-hot-code-swap/">More details on how this works</a></p>
+</section>
+
+<section>
+    <h1>Thank you</h1>
+    <a target="_blank" href="https://umaar.com/dev-tips/">umaar.com/dev-tips</a>
+    <p>Twitter: <a target="_blank" href="https://twitter.com/umaar">@umaar</a></small></p>
+    <p>umar.hansa@gmail.com for feedback or ideas</p>
+</section>
+
+            </div>
+        </div>
+
+        <script src="lib/js/head.min.js"></script>
+        <script src="js/reveal.js"></script>
+
+        <script>
+            Reveal.initialize({
+                history: true,
+                controls: false,
+                transition: 'none',
+                transitionSpeed: 'fast',
+                slideNumber: 'c/t',
+                width: 800,
+                height: 600,
+
+                dependencies: [
+                    { src: 'plugin/markdown/marked.js' },
+                    { src: 'plugin/markdown/markdown.js' },
+                    { src: 'plugin/notes/notes.js', async: true },
+                    {
+                        src: 'plugin/highlight/highlight.js',
+                        async: true, callback() {
+                            hljs.initHighlightingOnLoad();
+                        }}
+                ]
+            });
+        </script>
+    </body>
+</html>

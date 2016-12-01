@@ -1,0 +1,16 @@
+{
+  "name": "testium",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "author": "",
+  "license": "ISC",
+  "devDependencies": {
+    "mocha": "^3.1.2",
+    "testium-driver-sync": "^2.3.0",
+    "testium-mocha": "^1.1.0"
+  }
+}
